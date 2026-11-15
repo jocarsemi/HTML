@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Aula Web — HTML5, CSS3 y JavaScript</title>
+<style>
+:root{--bg:#101827;--panel:#172337;--panel2:#1d2c43;--text:#edf3fc;--muted:#9aabc2;--accent:#65a7ff;--accent2:#8b7cff;--green:#35c991;--red:#ff7474;--border:#2b3c55;--radius:16px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:260px;background:#0c1422;border-right:1px solid var(--border);padding:24px 16px;z-index:10;overflow:auto}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px;margin:0 8px 30px}.brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#091322;font-weight:900}
+.nav-label{margin:22px 10px 8px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:11px 13px;margin:4px 0;border:0;border-radius:11px;background:transparent;color:#c8d5e6;text-align:left}
+.nav-btn:hover,.nav-btn.active{background:#1d304a;color:white}.nav-btn.active{box-shadow:inset 3px 0 var(--accent)}
+.sidebar-progress{margin:28px 8px 0;padding:15px;background:var(--panel);border:1px solid var(--border);border-radius:13px}
+.main{margin-left:260px;padding:32px clamp(18px,4vw,58px);max-width:1600px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
+.eyebrow{font-size:11px;letter-spacing:1.4px;font-weight:800;color:var(--accent);text-transform:uppercase}
+h1,h2,h3{line-height:1.2}h1{font-size:clamp(28px,4vw,42px);margin:8px 0 10px}h2{font-size:26px;margin:0 0 16px}h3{font-size:18px;margin:22px 0 10px}p{color:#c6d2e2}
+.muted{color:var(--muted)}.view{display:none}.view.active{display:block}
+.hero{padding:30px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(120deg,#1c3554,#242b50);margin-bottom:24px}
+.hero p{max-width:760px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0 26px}
+.stat,.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:19px}.stat strong{display:block;font-size:26px;margin-top:4px}.stat span{color:var(--muted);font-size:13px}
+.progress-track{height:9px;background:#0b1422;border-radius:20px;overflow:hidden;margin-top:10px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px}.module-panel{align-self:start}.module-button,.lesson-button{width:100%;border:1px solid transparent;background:transparent;color:var(--text);text-align:left;border-radius:10px;padding:11px;margin:3px 0}
+.module-button{display:grid;grid-template-columns:28px 1fr;align-items:center;font-weight:700}.module-button small{grid-column:2;color:var(--muted);font-weight:400}.module-button.active,.lesson-button.active{background:#203651;border-color:#345478}
+.lesson-button{font-size:13px;color:#c5d1e0}.lesson-button.completed{color:var(--green)}
+.lesson-content{min-width:0}.lesson-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px}.lesson-body{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,3vw,32px)}
+.lesson-body h2{margin-top:0}.lesson-body h3{color:#dce9fa}.lesson-body li{margin:7px 0;color:#c6d2e2}.lesson-body code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.lesson-body code{background:#0c1728;padding:2px 6px;border-radius:5px;color:#9dc7ff}.lesson-body pre{white-space:pre-wrap;overflow:auto;background:#0a1320;border:1px solid var(--border);padding:16px;border-radius:12px;color:#c9dcf6}
+.lesson-body pre code{background:none;padding:0}.concept-card,.tip-card,.warning-card,.challenge-callout{padding:15px 18px;border-radius:12px;margin:18px 0;background:#1b3551;border-left:4px solid var(--accent)}.tip-card{border-color:var(--green)}.warning-card{border-color:#ffbd5c}
+.lesson-navigation{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);background:var(--panel2);font-weight:650}.btn:hover{filter:brightness(1.15)}.btn:disabled{opacity:.4;cursor:not-allowed}.btn-primary{background:var(--accent);color:#071426;border-color:var(--accent)}.btn-secondary{background:transparent}
+.sandbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.editors{display:grid;grid-template-columns:1fr;gap:12px}.editor-card{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden}.editor-head{padding:9px 13px;background:#203149;font-weight:750;font-size:13px}.editor-card textarea,.challenge-workspace textarea{display:block;width:100%;min-height:190px;resize:vertical;background:#0a1320;color:#d7e7fb;border:0;padding:14px;outline:none;font:13px/1.55 ui-monospace,Consolas,monospace;tab-size:4}
+.preview-frame{width:100%;height:640px;background:white;border:0;border-radius:12px}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0}
+select{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:9px}
+.challenge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.challenge-card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:19px}.challenge-card.completed{border-color:#287e65}.challenge-top,.challenge-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.challenge-category{color:var(--accent);font-weight:800}.challenge-description{color:#c5d2e3;margin:12px 0}.challenge-workspace{margin-top:22px}.challenge-workspace[hidden]{display:none}.challenge-workspace-inner{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px}.challenge-workspace textarea{border:1px solid var(--border);border-radius:10px;margin:10px 0}.check-item{padding:5px 0}.check-item.passed{color:var(--green)}.check-item.failed{color:#ff9a9a}
+.quiz-question{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin:14px 0}.quiz-question h3{margin:0 0 14px}.question-number{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#29456a;color:#bcd8ff;margin-right:8px}.quiz-option{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;margin:5px 0;border:1px solid transparent;border-radius:9px;color:#d1ddec}.quiz-option:hover{background:#203149}.quiz-option input{margin-top:5px;accent-color:var(--accent)}.quiz-explanation{display:none;margin-top:12px;padding:12px;border-radius:9px;background:#102b27}.quiz-explanation.show{display:block}.quiz-explanation.incorrect{background:#351d27}.quiz-result-card{text-align:center;padding:25px;margin-top:20px;background:var(--panel);border:1px solid var(--border);border-radius:16px}.quiz-score{font-size:48px;font-weight:850;color:var(--green)}
+#app-notification{position:fixed;right:20px;bottom:20px;z-index:30;padding:12px 18px;border-radius:11px;background:#1b745c;color:white;box-shadow:0 10px 30px #0005;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}#app-notification.show{opacity:1;transform:translateY(0)}#app-notification[data-type=error]{background:#a63c4d}
+.menu-toggle{display:none}
+@media(max-width:950px){.sidebar{width:225px}.main{margin-left:225px}.layout{grid-template-columns:1fr}.module-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.module-panel h3{grid-column:1/-1}.lesson-list{grid-column:1/-1}.sandbox-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.sidebar{transform:translateX(-100%);transition:transform .25s;width:270px}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:20px 14px}.menu-toggle{display:inline-block}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.challenge-grid{grid-template-columns:1fr}.hero{padding:21px}.lesson-header{display:block}.preview-frame{height:480px}.topbar{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><span class="brand-mark">&lt;/&gt;</span> Aula Web</div>
+  <div class="nav-label">Aprendizaje</div>
+  <button class="nav-btn active" data-view="temario">📚 <span>Temario</span></button>
+  <button class="nav-btn" data-view="sandbox">💻 <span>Laboratorio</span></button>
+  <button class="nav-btn" data-view="retos">🎯 <span>Retos</span></button>
+  <button class="nav-btn" data-view="quiz">🧠 <span>Evaluación</span></button>
+  <div class="sidebar-progress">
+    <small class="muted">TU PROGRESO</small>
+    <div style="font-size:24px;font-weight:800" id="progress-percent">0%</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
+    <p class="muted" style="font-size:12px;margin-bottom:0"><span id="total-xp">0</span> XP acumulados</p>
+  </div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div><button class="btn menu-toggle" id="menu-toggle" aria-label="Abrir menú">☰</button></div>
+    <div class="muted">2.º Bachillerato · Desarrollo web</div>
+  </div>
+
+  <section class="view active" id="view-temario">
+    <div class="hero">
+      <span class="eyebrow">RUTA DE APRENDIZAJE</span>
+      <h1>Domina el desarrollo web</h1>
+      <p>Aprende a construir páginas web con HTML5, diseñarlas con CSS3 y añadir interactividad con JavaScript. Estudia, experimenta y demuestra lo que sabes.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Lecciones completadas</span><strong id="completed-lessons">0</strong></div>
+      <div class="stat"><span>Retos superados</span><strong id="completed-challenges">0/6</strong></div>
+      <div class="stat"><span>Experiencia</span><strong><span id="total-xp">0</span> XP</strong></div>
+      <div class="stat"><span>Resultado del quiz</span><strong id="quiz-score">Pendiente</strong></div>
+    </div>
+    <div class="layout">
+      <div class="module-panel card">
+        <h3 style="margin-top:0">Módulos</h3>
+        <div id="module-list"></div>
+        <h3>Lecciones</h3>
+        <div id="lesson-list" class="lesson-list"></div>
+      </div>
+      <div id="lesson-content" class="lesson-content"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-sandbox">
+    <div class="hero"><span class="eyebrow">PRACTICA Y EXPERIMENTA</span><h1>Laboratorio web</h1><p>Edita HTML, CSS y JavaScript y observa el resultado en tiempo real. El código se ejecuta en una vista previa aislada.</p></div>
+    <div class="toolbar">
+      <label for="template-select" class="muted">Plantilla:</label>
+      <select id="template-select"><option value="blank">Página básica</option><option value="card">Tarjeta digital</option><option value="counter">Contador interactivo</option><option value="form">Formulario</option></select>
+      <button class="btn btn-primary" id="run-code">▶ Ejecutar</button>
+      <button class="btn btn-secondary" id="reset-code">Restaurar</button>
+    </div>
+    <div class="sandbox-grid">
+      <div class="editors">
+        <div class="editor-card"><div class="editor-head">HTML</div><textarea id="editor-html" spellcheck="false" aria-label="Editor HTML"></textarea></div>
+        <div class="editor-card"><div class="editor-head">CSS</div><textarea id="editor-css" spellcheck="false" aria-label="Editor CSS"></textarea></div>
+        <div class="editor-card"><div class="editor-head">JavaScript</div><textarea id="editor-js" spellcheck="false" aria-label="Editor JavaScript"></textarea></div>
+      </div>
+      <div><div class="editor-head" style="border-radius:10px 10px 0 0">VISTA PREVIA</div><iframe id="preview-frame" class="preview-frame" title="Vista previa del proyecto" sandbox="allow-scripts"></iframe></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-retos">
+    <div class="hero"><span class="eyebrow">DEMUESTRA LO QUE SABES</span><h1>Retos de programación</h1><p>Resuelve seis desafíos prácticos. Cada reto incluye comprobaciones automáticas y puntos de experiencia.</p></div>
+    <div id="challenges-container" class="challenge-grid"></div>
+    <div id="challenge-workspace" class="challenge-workspace" hidden></div>
+  </section>
+
+  <section class="view" id="view-quiz">
+    <div class="hero"><span class="eyebrow">EVALUACIÓN FINAL</span><h1>Comprueba tu nivel</h1><p>12 preguntas sobre HTML, CSS y JavaScript. Responde todas para corregir el cuestionario.</p></div>
+    <div id="quiz-container"></div>
+  </section>
+</main>
+</div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const STORAGE_KEY="aulaWebProgress_v1";
+const fresh=()=>({completedLessons:[],completedChallenges:[],quizAnswers:{},quizCompleted:false,quizScore:0});
+let progress={...fresh(),...(()=>{try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch{return {}}})()};
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(progress));dashboard()}
+function notify(msg,type="success"){let n=$("#app-notification");if(!n){n=document.createElement("div");n.id="app-notification";document.body.append(n)}n.textContent=msg;n.dataset.type=type;n.classList.add("show");clearTimeout(notify.t);notify.t=setTimeout(()=>n.classList.remove("show"),2500)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const modules=[
+{id:"html",title:"HTML5: estructura web",icon:"🌐",description:"Construye la estructura y el contenido de una página web.",lessons:[
+["Introducción a HTML5",`<h2>Introducción a HTML5</h2><p>HTML (HyperText Markup Language) es un lenguaje de marcado que define la estructura y el significado del contenido web. No es un lenguaje de programación: organiza la información mediante etiquetas.</p><h3>Estructura básica</h3><pre><code>&lt;!DOCTYPE html&gt;\n&lt;html lang="es"&gt;\n&lt;head&gt;\n  &lt;meta charset="UTF-8"&gt;\n  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;\n  &lt;title&gt;Mi primera web&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;h1&gt;Hola, mundo&lt;/h1&gt;\n  &lt;p&gt;Mi primera página web.&lt;/p&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><ul><li><code>DOCTYPE</code>: declara HTML5.</li><li><code>html</code>: elemento raíz.</li><li><code>head</code>: metadatos y configuración.</li><li><code>body</code>: contenido visible.</li><li><code>title</code>: título de la pestaña.</li></ul><div class="tip-card"><b>Consejo:</b> declara siempre el idioma con <code>lang="es"</code> y utiliza UTF-8.</div>`],
+["Texto, enlaces e imágenes",`<h2>Texto, enlaces e imágenes</h2><h3>Encabezados y párrafos</h3><pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;\n&lt;h2&gt;Apartado&lt;/h2&gt;\n&lt;p&gt;Un párrafo de texto.&lt;/p&gt;\n&lt;strong&gt;Importante&lt;/strong&gt;\n&lt;em&gt;Énfasis&lt;/em&gt;</code></pre><p>Los encabezados van de h1 a h6 y representan jerarquía, no tamaños visuales.</p><h3>Listas</h3><pre><code>&lt;ul&gt;&lt;li&gt;HTML&lt;/li&gt;&lt;li&gt;CSS&lt;/li&gt;&lt;/ul&gt;\n&lt;ol&gt;&lt;li&gt;Diseñar&lt;/li&gt;&lt;li&gt;Programar&lt;/li&gt;&lt;/ol&gt;</code></pre><h3>Enlaces e imágenes</h3><pre><code>&lt;a href="https://www.w3.org/"&gt;W3C&lt;/a&gt;\n&lt;img src="foto.jpg" alt="Descripción de la imagen"&gt;</code></pre><p>El atributo <code>alt</code> aporta una alternativa textual y mejora la accesibilidad. Para enlaces en otra pestaña, combina <code>target="_blank"</code> con <code>rel="noopener noreferrer"</code>.</p>`],
+["HTML semántico",`<h2>HTML semántico</h2><p>Las etiquetas semánticas describen el significado de las partes de una página.</p><ul><li><code>header</code>: cabecera.</li><li><code>nav</code>: navegación.</li><li><code>main</code>: contenido principal.</li><li><code>section</code>: sección temática.</li><li><code>article</code>: contenido independiente.</li><li><code>aside</code>: contenido complementario.</li><li><code>footer</code>: pie de página.</li></ul><pre><code>&lt;header&gt;&lt;h1&gt;Revista digital&lt;/h1&gt;&lt;/header&gt;\n&lt;nav&gt;Menú&lt;/nav&gt;\n&lt;main&gt;\n  &lt;section&gt;\n    &lt;article&gt;&lt;h2&gt;Noticia&lt;/h2&gt;&lt;p&gt;Texto...&lt;/p&gt;&lt;/article&gt;\n  &lt;/section&gt;\n  &lt;aside&gt;Relacionado&lt;/aside&gt;\n&lt;/main&gt;\n&lt;footer&gt;© 2026&lt;/footer&gt;</code></pre><div class="concept-card"><b>Ventajas:</b> accesibilidad, mejor comprensión del código y estructura más mantenible. No uses div para todo si existe un elemento semántico adecuado.</div>`],
+["Formularios y tablas",`<h2>Formularios y tablas</h2><p>Los formularios recogen datos del usuario. Asocia cada campo con una etiqueta.</p><pre><code>&lt;form action="/registro" method="post"&gt;\n  &lt;label for="nombre"&gt;Nombre&lt;/label&gt;\n  &lt;input id="nombre" name="nombre" required&gt;\n  &lt;label for="email"&gt;Correo&lt;/label&gt;\n  &lt;input id="email" name="email" type="email" required&gt;\n  &lt;button type="submit"&gt;Enviar&lt;/button&gt;\n&lt;/form&gt;</code></pre><p>Tipos habituales: text, email, password, number, date, checkbox y radio. Otros controles: select y textarea.</p><h3>Tablas</h3><pre><code>&lt;table&gt;\n &lt;caption&gt;Calificaciones&lt;/caption&gt;\n &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Alumno&lt;/th&gt;&lt;th&gt;Nota&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;\n &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Ana&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;\n&lt;/table&gt;</code></pre><p>Utiliza tablas para datos tabulares, no para maquetar páginas.</p>`]
+]},
+{id:"css",title:"CSS3: diseño y estilos",icon:"🎨",description:"Transforma documentos HTML en páginas atractivas y adaptables.",lessons:[
+["Introducción a CSS3",`<h2>Introducción a CSS3</h2><p>CSS (Cascading Style Sheets) define la presentación visual de los documentos HTML. HTML estructura, CSS presenta y JavaScript aporta comportamiento.</p><h3>Sintaxis</h3><pre><code>selector {\n  propiedad: valor;\n}\nh1 { color: blue; font-size: 32px; }</code></pre><h3>Formas de aplicar CSS</h3><pre><code>&lt;link rel="stylesheet" href="styles.css"&gt;\n&lt;style&gt;p { color: red; }&lt;/style&gt;\n&lt;p style="color:red"&gt;Texto&lt;/p&gt;</code></pre><p>En proyectos reales, suele preferirse una hoja externa para separar responsabilidades y facilitar el mantenimiento.</p>`],
+["Selectores y especificidad",`<h2>Selectores y especificidad</h2><pre><code>/* Etiqueta */ p { color: gray; }\n/* Clase */ .destacado { color: red; }\n/* ID */ #principal { background: black; }\n/* Universal */ * { box-sizing: border-box; }\n/* Descendiente */ article p { color: navy; }\n/* Hijo directo */ .menu > li { list-style: none; }\na:hover { color: red; }\ninput:focus { outline: 2px solid blue; }</code></pre><p>La especificidad depende del tipo de selector: estilos en línea, identificadores, clases/atributos/pseudoclases y elementos/pseudoelementos. La cascada también considera origen, importancia y orden. Evita abusar de <code>!important</code>.</p>`],
+["Modelo de caja y tipografía",`<h2>Modelo de caja</h2><p>Cada elemento se representa como una caja rectangular formada por contenido, padding, borde y margen.</p><pre><code>.caja {\n  width: 300px;\n  padding: 20px;\n  border: 5px solid black;\n  margin: 15px;\n}\n* { box-sizing: border-box; }</code></pre><p>Con border-box, el ancho declarado incluye contenido, padding y borde.</p><h3>Tipografía y unidades</h3><pre><code>body { font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6; }\nh1 { font-size: 2rem; font-weight: 700; }</code></pre><ul><li>px: unidad CSS de referencia.</li><li>rem: relativo al tamaño raíz.</li><li>em: relativo al tamaño de fuente del contexto.</li><li>%: relativo al contexto de la propiedad.</li><li>vw/vh: relativo al viewport.</li></ul><p>Los colores pueden expresarse mediante nombres, hexadecimal, RGB o HSL.</p>`],
+["Flexbox, Grid y responsive",`<h2>Diseño moderno con CSS</h2><h3>Flexbox</h3><p>Organiza elementos en una dimensión (fila o columna).</p><pre><code>.contenedor {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 20px;\n  flex-wrap: wrap;\n}</code></pre><h3>CSS Grid</h3><p>Permite diseños bidimensionales.</p><pre><code>.galeria {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}</code></pre><h3>Responsive y media queries</h3><pre><code>.contenedor { width: min(100% - 32px, 1100px); margin-inline: auto; }\n@media (max-width: 700px) {\n  .galeria { grid-template-columns: 1fr; }\n}</code></pre><h3>Variables y transiciones</h3><pre><code>:root { --principal: #2563eb; }\n.boton { background: var(--principal); transition: transform .2s; }\n.boton:hover { transform: translateY(-3px); }</code></pre>`]
+]},
+{id:"javascript",title:"JavaScript: programación web",icon:"⚡",description:"Añade lógica, interacción y dinamismo a tus páginas.",lessons:[
+["Introducción a JavaScript",`<h2>Introducción a JavaScript</h2><p>JavaScript es un lenguaje de programación que añade comportamiento dinámico a las páginas web.</p><pre><code>&lt;script src="app.js" defer&gt;&lt;/script&gt;\nconsole.log("Hola, mundo");\nalert("Bienvenido");</code></pre><h3>Variables y tipos</h3><pre><code>const nombre = "Ana";\nlet edad = 17;\nedad = 18;\nconst activo = true;\nconst decimal = 3.14;\nconst vacio = null;</code></pre><p>const impide reasignar el identificador; let permite reasignación. Tipos comunes: string, number, boolean, undefined, null, object y symbol.</p><h3>Operadores</h3><pre><code>const suma = 5 + 3;\nconst resto = 7 % 2;\nconst iguales = (5 === 5);</code></pre><p>Prefiere === para comparar valor y tipo sin coerción.</p>`],
+["Condicionales y bucles",`<h2>Condicionales y bucles</h2><pre><code>const nota = 7;\nif (nota >= 5) {\n  console.log("Aprobado");\n} else {\n  console.log("Suspenso");\n}</code></pre><p>Operadores lógicos: && (AND), || (OR), ! (NOT).</p><h3>Switch</h3><pre><code>switch (dia) {\n  case 1: console.log("Lunes"); break;\n  case 2: console.log("Martes"); break;\n  default: console.log("Otro día");\n}</code></pre><h3>Bucles</h3><pre><code>for (let i = 1; i <= 5; i++) console.log(i);\nlet contador = 1;\nwhile (contador <= 5) { console.log(contador); contador++; }\nfor (const lenguaje of ["HTML","CSS","JS"]) console.log(lenguaje);</code></pre>`],
+["Funciones y arrays",`<h2>Funciones y arrays</h2><pre><code>function saludar(nombre) {\n  return "Hola " + nombre;\n}\nconst sumar = (a, b) => a + b;</code></pre><p>Los parámetros reciben datos y return devuelve un resultado.</p><h3>Arrays</h3><pre><code>const frutas = ["manzana", "pera", "kiwi"];\nfrutas.push("naranja");\nconsole.log(frutas[0], frutas.length);\nconst dobles = [1,2,3].map(n => n * 2);\nconst pares = [1,2,3,4].filter(n => n % 2 === 0);\nconst total = [1,2,3].reduce((acc,n) => acc+n, 0);</code></pre><h3>Objetos</h3><pre><code>const alumno = { nombre: "Lucía", edad: 17 };\nconsole.log(alumno.nombre);\nalumno.edad = 18;</code></pre>`],
+["DOM y eventos",`<h2>DOM y eventos</h2><p>El DOM representa el documento como objetos que JavaScript puede consultar y modificar.</p><pre><code>const titulo = document.querySelector("h1");\nconst botones = document.querySelectorAll("button");\ntitulo.textContent = "Nuevo título";\nconst caja = document.querySelector("#caja");\ncaja.classList.toggle("activo");</code></pre><h3>Eventos</h3><pre><code>document.querySelector("#boton").addEventListener("click", () => {\n  alert("Has pulsado el botón");\n});</code></pre><h3>Formularios</h3><pre><code>form.addEventListener("submit", event => {\n  event.preventDefault();\n  const nombre = document.querySelector("#nombre").value;\n  console.log(nombre);\n});</code></pre><h3>Almacenamiento local</h3><pre><code>localStorage.setItem("usuario", "Ana");\nconst usuario = localStorage.getItem("usuario");\nlocalStorage.removeItem("usuario");</code></pre><p>Para guardar objetos usa JSON.stringify y para recuperarlos JSON.parse. No guardes contraseñas ni secretos en localStorage.</p>`]
+]},
+{id:"project",title:"Proyecto web: integración",icon:"🚀",description:"Aplica los tres lenguajes en un proyecto completo.",lessons:[
+["Organización del proyecto",`<h2>Organización de un proyecto web</h2><pre><code>mi-proyecto/\n├── index.html\n├── css/styles.css\n├── js/app.js\n└── img/</code></pre><p>Separa estructura, estilos, lógica y recursos. Utiliza nombres claros, evita duplicaciones, comenta lo complejo y organiza los archivos por responsabilidad.</p><pre><code>&lt;link rel="stylesheet" href="css/styles.css"&gt;\n&lt;script src="js/app.js" defer&gt;&lt;/script&gt;</code></pre>`],
+["Accesibilidad y responsive",`<h2>Accesibilidad y diseño responsive</h2><ul><li>Usa HTML semántico.</li><li>Añade textos alternativos a imágenes informativas.</li><li>Asocia labels a los campos.</li><li>Mantén contraste suficiente.</li><li>Permite navegar con teclado.</li><li>No comuniques información solo mediante color.</li></ul><pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;\n@media (max-width: 768px) {\n  .tarjetas { grid-template-columns: 1fr; }\n}</code></pre><p>Prueba distintos tamaños, navegación por teclado y lectores de pantalla.</p>`],
+["Seguridad y buenas prácticas",`<h2>Seguridad y buenas prácticas</h2><ul><li>No confíes en los datos introducidos por el usuario.</li><li>Valida siempre en el servidor.</li><li>Evita insertar contenido no confiable con innerHTML.</li><li>Usa HTTPS en sitios publicados.</li><li>No guardes contraseñas en texto plano.</li><li>No incluyas claves secretas en JavaScript del navegador.</li></ul><pre><code>const campo = document.querySelector("#email");\nif (!campo.checkValidity()) console.log("Correo no válido");</code></pre><p>La validación del navegador mejora la experiencia, pero no sustituye a la validación del servidor.</p>`],
+["Publicación y proyecto final",`<h2>Publicación y proyecto final</h2><ol><li>Define el objetivo y el público.</li><li>Diseña la estructura.</li><li>Crea HTML.</li><li>Aplica CSS.</li><li>Añade JavaScript.</li><li>Comprueba accesibilidad y adaptación.</li><li>Prueba y corrige errores.</li><li>Publica el proyecto.</li></ol><div class="challenge-callout"><b>Proyecto: portal de aula</b><p>Crea una web con cabecera y navegación, tres secciones semánticas, galería, CSS externo, diseño responsive, formulario validado y una función JavaScript interactiva.</p></div>`]
+]}
+];
+let mi=0,li=0;
+function lessonId(m,l){return `${modules[m].id}-${l}`}
+function renderModules(){
+ $("#module-list").innerHTML=modules.map((m,i)=>`<button class="module-button ${i===mi?"active":""}" data-mod="${i}"><span>${m.icon}</span><span>${m.title}</span><small>4 lecciones</small></button>`).join("");
+ $$("[data-mod]").forEach(b=>b.onclick=()=>{mi=+b.dataset.mod;li=0;renderModules();renderLesson()});
+}
+function renderLesson(){
+ const m=modules[mi],lesson=m.lessons[li],id=lessonId(mi,li),done=progress.completedLessons.includes(id);
+ $("#lesson-list").innerHTML=m.lessons.map((x,i)=>`<button class="lesson-button ${i===li?"active":""} ${progress.completedLessons.includes(lessonId(mi,i))?"completed":""}" data-les="${i}">${progress.completedLessons.includes(lessonId(mi,i))?"✓":"○"} ${i+1}. ${x[0]}</button>`).join("");
+ $$("[data-les]").forEach(b=>b.onclick=()=>{li=+b.dataset.les;renderLesson()});
+ $("#lesson-content").innerHTML=`<div class="lesson-header"><div><span class="eyebrow">MÓDULO ${mi+1}</span><h1>${lesson[0]}</h1><p>${m.description}</p></div><span class="muted">Lección ${li+1}/4</span></div><div class="lesson-body">${lesson[1]}</div><div class="lesson-navigation"><button class="btn btn-secondary" id="prev" ${li===0?"disabled":""}>← Anterior</button><button class="btn btn-primary" id="complete">${done?"✓ Lección completada":"Marcar como completada"}</button><button class="btn btn-secondary" id="next" ${li===3?"disabled":""}>Siguiente →</button></div>`;
+ $("#prev").onclick=()=>{if(li>0){li--;renderLesson()}};
+ $("#next").onclick=()=>{if(li<3){li++;renderLesson()}};
+ $("#complete").onclick=()=>{if(!progress.completedLessons.includes(id)){progress.completedLessons.push(id);save();notify("¡Lección completada! +10 XP")}renderLesson()};
+}
+function showView(name){
+ $$(".view").forEach(v=>{v.classList.toggle("active",v.id===`view-${name}`)});
+ $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+ $("#sidebar").classList.remove("open");
+ if(name==="temario"){renderModules();renderLesson()}
+ if(name==="sandbox")preview();
+ if(name==="retos")renderChallenges();
+ if(name==="quiz")renderQuiz();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+$$("[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+$("#menu-toggle").onclick=()=>$("#sidebar").classList.toggle("open");
+
+const templates={
+blank:{html:`<h1>Mi primera web</h1>\n<p>¡Estoy aprendiendo HTML, CSS y JavaScript!</p>\n<button id="saludar">Saludar</button>\n<p id="mensaje"></p>`,css:`body { font-family: Arial, sans-serif; padding: 30px; color: #222; }\nh1 { color: #2563eb; }\nbutton { padding: 10px 16px; border: 0; border-radius: 8px; background: #2563eb; color: white; cursor: pointer; }`,js:`document.querySelector("#saludar").addEventListener("click", () => {\n  document.querySelector("#mensaje").textContent = "¡Hola, desarrollador web!";\n});`},
+card:{html:`<main class="tarjeta">\n <span class="etiqueta">PROYECTO WEB</span>\n <h1>Mi tarjeta digital</h1>\n <p>Estoy aprendiendo a crear páginas web.</p>\n <button id="accion">Descubrir</button>\n <p id="resultado"></p>\n</main>`,css:`* { box-sizing: border-box; }\nbody { min-height: 100vh; margin: 0; display: grid; place-items: center; background: #eef2ff; font-family: Arial; }\n.tarjeta { width: min(90%,400px); padding: 30px; background: white; border-radius: 18px; box-shadow: 0 10px 30px #0002; }\n.etiqueta { color: #2563eb; font-weight: bold; }\nbutton { background: #2563eb; color: white; border: 0; border-radius: 8px; padding: 12px 18px; cursor: pointer; }`,js:`document.querySelector("#accion").addEventListener("click", () => {\n document.querySelector("#resultado").textContent = "¡Has descubierto JavaScript!";\n});`},
+counter:{html:`<main class="contador">\n <h1>Contador interactivo</h1><p id="numero">0</p>\n <button id="restar">−</button><button id="sumar">+</button><button id="reiniciar">Reiniciar</button>\n</main>`,css:`body { font-family: Arial; text-align: center; padding: 40px; background: #f8fafc; }\n.contador { max-width: 400px; margin: auto; padding: 30px; background: white; border-radius: 18px; }\n#numero { font-size: 60px; font-weight: bold; color: #2563eb; }\nbutton { padding: 12px 18px; margin: 5px; border: 0; border-radius: 8px; background: #2563eb; color: white; cursor: pointer; }`,js:`let contador = 0;\nconst numero = document.querySelector("#numero");\ndocument.querySelector("#sumar").onclick = () => numero.textContent = ++contador;\ndocument.querySelector("#restar").onclick = () => numero.textContent = --contador;\ndocument.querySelector("#reiniciar").onclick = () => numero.textContent = (contador = 0);`},
+form:{html:`<main class="formulario"><h1>Formulario de contacto</h1>\n<form id="contacto"><label for="nombre">Nombre</label><input id="nombre" required placeholder="Tu nombre">\n<label for="email">Correo electrónico</label><input id="email" type="email" required placeholder="tu@email.com">\n<button type="submit">Enviar</button></form><p id="respuesta" aria-live="polite"></p></main>`,css:`body { font-family: Arial; background: #f1f5f9; padding: 25px; }\n.formulario { max-width: 450px; margin: 30px auto; padding: 28px; background: white; border-radius: 14px; }\nlabel { display: block; margin-top: 16px; }\ninput { width: 100%; padding: 12px; margin-top: 6px; border: 1px solid #cbd5e1; border-radius: 8px; }\nbutton { margin-top: 20px; padding: 12px 20px; background: #2563eb; color: white; border: 0; border-radius: 8px; }`,js:`document.querySelector("#contacto").addEventListener("submit", event => {\n event.preventDefault();\n const nombre = document.querySelector("#nombre").value;\n document.querySelector("#respuesta").textContent = "¡Gracias por contactar, " + nombre + "!";\n});`}
+};
+function preview(){
+ const frame=$("#preview-frame");if(!frame)return;
+ const h=$("#editor-html").value,c=$("#editor-css").value,j=$("#editor-js").value.replace(/<\/script/gi,"<\/script");
+ frame.srcdoc=`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${c.replace(/<\/style/gi,"<\/style")}</style></head><body>${h}<script>try{${j}}catch(e){console.error(e)}<\/script></body></html>`;
+}
+function loadTemplate(name){const t=templates[name];if(!t)return;$("#editor-html").value=t.html;$("#editor-css").value=t.css;$("#editor-js").value=t.js;preview()}
+["editor-html","editor-css","editor-js"].forEach(id=>$("#"+id).addEventListener("input",preview));
+$("#run-code").onclick=preview;$("#reset-code").onclick=()=>loadTemplate("blank");$("#template-select").onchange=e=>loadTemplate(e.target.value);
+loadTemplate("blank");
+
+const challenges=[
+{id:"h1",cat:"HTML",title:"La estructura perdida",difficulty:"Fácil",xp:20,desc:`Crea una estructura HTML5 completa con un h1 que diga “Mi primera página” y un párrafo “Estoy aprendiendo HTML”.`,starter:`<!DOCTYPE html>\n<html lang="es">\n<head><meta charset="UTF-8"><title>Mi página</title></head>\n<body>\n\n</body>\n</html>`,checks:c=>{let t=c.toLowerCase();return [["Incluye DOCTYPE HTML",/<!doctype\s+html/.test(t)],["Incluye html",/<html\b/.test(t)],["Incluye head y body",/<head\b/.test(t)&&/<body\b/.test(t)],["Incluye h1",/<h1\b/.test(t)],["Incluye el título",/mi primera página|mi primera pagina/.test(t)],["Incluye el párrafo",/estoy aprendiendo html/.test(t)]]}},
+{id:"h2",cat:"HTML",title:"Formulario de acceso",difficulty:"Medio",xp:30,desc:`Construye un formulario con label, un input de texto, un input de contraseña (type="password") y un botón de envío.`,starter:`<form>\n  <!-- Construye tu formulario -->\n</form>`,checks:c=>{let t=c.toLowerCase();return [["Existe form",/<form\b/.test(t)],["Incluye label",/<label\b/.test(t)],["Campo de texto",/<input[^>]*type\s*=\s*["']?text/.test(t)],["Campo password",/<input[^>]*type\s*=\s*["']?password/.test(t)],["Incluye botón",/<button\b/.test(t)||/type\s*=\s*["']?submit/.test(t)]]}},
+{id:"c1",cat:"CSS",title:"Dale vida a una tarjeta",difficulty:"Fácil",xp:20,desc:`Crea la clase .tarjeta con fondo blanco, esquinas redondeadas, padding mínimo de 20px y sombra.`,starter:`.tarjeta {\n  /* Tus estilos */\n}`,checks:c=>{let t=c.toLowerCase();return [["Selecciona .tarjeta",/\.tarjeta\s*\{/.test(t)],["Fondo blanco",/background(?:-color)?\s*:\s*(white|#fff(?:fff)?)/.test(t)],["Esquinas redondeadas",/border-radius\s*:\s*(?!0(?:px)?\s*;)[^;]+/.test(t)],["Padding de 20px o más",/padding\s*:\s*(2\d|[3-9]\d|\d{3,})px/.test(t)],["Incluye sombra",/box-shadow\s*:/.test(t)]]}},
+{id:"c2",cat:"CSS",title:"Diseño adaptable",difficulty:"Medio",xp:30,desc:`Crea .contenedor con display:flex, gap y una media query para pantallas de hasta 600px.`,starter:`.contenedor {\n  /* Tu código */\n}\n\n/* Media query */`,checks:c=>{let t=c.toLowerCase();return [["Selecciona .contenedor",/\.contenedor\s*\{/.test(t)],["Utiliza display:flex",/display\s*:\s*flex/.test(t)],["Define gap",/gap\s*:\s*[^;]+/.test(t)],["Incluye media query",/@media/.test(t)],["Max-width 600px",/max-width\s*:\s*600px/.test(t)]]}},
+{id:"j1",cat:"JavaScript",title:"Calculadora de suma",difficulty:"Fácil",xp:25,desc:`Crea una función sumar(a, b) que devuelva la suma mediante return.`,starter:`// Crea aquí tu función sumar`,checks:c=>{let t=c.toLowerCase();return [["Declara sumar",/function\s+sumar\s*\(/.test(t)||/(const|let|var)\s+sumar\s*=/.test(t)],["Recibe dos parámetros",/sumar\s*\(\s*[\w$]+\s*,\s*[\w$]+\s*\)/.test(t)],["Utiliza return",/\breturn\b/.test(t)],["Realiza una suma",/[\w$]+\s*\+\s*[\w$]+/.test(t)]]}},
+{id:"j2",cat:"JavaScript",title:"El contador inteligente",difficulty:"Medio",xp:35,desc:`Declara contador con valor 0, crea incrementar() para aumentarlo en 1 y muestra el resultado con console.log.`,starter:`// Declara contador\n// Crea incrementar\n// Muestra el resultado`,checks:c=>{let t=c.toLowerCase();return [["Declara contador",/\b(let|var|const)\s+contador\b/.test(t)],["Inicializa a cero",/\bcontador\s*=\s*0\b/.test(t)],["Declara incrementar",/function\s+incrementar\s*\(/.test(t)||/(const|let|var)\s+incrementar\s*=/.test(t)],["Incrementa contador",/contador\s*(\+\+|\+=\s*1|=\s*contador\s*\+\s*1)/.test(t)],["Muestra con console.log",/console\.log\s*\(/.test(t)]]}}
+];
+function renderChallenges(){
+ $("#challenges-container").innerHTML=challenges.map(x=>`<article class="challenge-card ${progress.completedChallenges.includes(x.id)?"completed":""}"><div class="challenge-top"><span class="challenge-category">${x.cat}</span><span>${x.difficulty}</span></div><h3>${x.title}</h3><p class="challenge-description">${x.desc}</p><div class="challenge-meta"><span>⭐ ${x.xp} XP</span><span>${progress.completedChallenges.includes(x.id)?"✓ Completado":"Pendiente"}</span></div><button class="btn btn-primary" data-ch="${x.id}">Resolver reto</button></article>`).join("");
+ $$("[data-ch]").forEach(b=>b.onclick=()=>openChallenge(b.dataset.ch));
+}
+function openChallenge(id){
+ const x=challenges.find(a=>a.id===id),w=$("#challenge-workspace");w.hidden=false;
+ w.innerHTML=`<div class="challenge-workspace-inner"><div class="challenge-top"><span class="challenge-category">${x.cat}</span><button class="btn btn-secondary" id="close-ch">Cerrar ✕</button></div><h2>${x.title}</h2><p>${x.desc}</p><label for="challenge-code">Tu código</label><textarea id="challenge-code" rows="12" spellcheck="false">${esc(x.starter)}</textarea><div class="toolbar"><button class="btn btn-primary" id="check-ch">Comprobar solución</button><button class="btn btn-secondary" id="reset-ch">Restaurar</button></div><div id="challenge-feedback" aria-live="polite"></div></div>`;
+ $("#close-ch").onclick=()=>w.hidden=true;$("#reset-ch").onclick=()=>{$("#challenge-code").value=x.starter;$("#challenge-feedback").innerHTML=""};
+ $("#check-ch").onclick=()=>{const checks=x.checks($("#challenge-code").value),ok=checks.filter(c=>c[1]).length,done=ok===checks.length;$("#challenge-feedback").innerHTML=`<div class="card"><h3>${done?"¡Reto superado!":"Sigue intentándolo"}</h3><p>${ok} de ${checks.length} comprobaciones correctas.</p>${checks.map(c=>`<div class="check-item ${c[1]?"passed":"failed"}">${c[1]?"✓":"✗"} ${c[0]}</div>`).join("")}</div>`;if(done&&!progress.completedChallenges.includes(x.id)){progress.completedChallenges.push(x.id);save();renderChallenges();notify(`¡Reto superado! +${x.xp} XP`)}};
+ w.scrollIntoView({behavior:"smooth"});
+}
+const questions=[
+["¿Qué significa HTML?",["HyperText Markup Language","HighText Machine Language","HyperTool Multi Language","Home Text Markup Language"],0,"HTML es HyperText Markup Language, un lenguaje de marcado."],
+["¿Qué etiqueta contiene el contenido visible?",["head","body","meta","title"],1,"body contiene el contenido visible del documento."],
+["¿Qué atributo describe una imagen?",["title","src","alt","href"],2,"alt ofrece una alternativa textual a la imagen."],
+["¿Qué elemento representa el contenido principal?",["main","aside","footer","span"],0,"main identifica el contenido principal."],
+["¿Qué propiedad cambia el color del texto?",["background","font-style","color","text-decoration"],2,"color establece el color del texto."],
+["¿Qué sistema organiza elementos en dos dimensiones?",["Float","CSS Grid","Inline","Position"],1,"CSS Grid organiza filas y columnas."],
+["¿Qué declaración activa Flexbox?",["position:flex","display:flex","flex:enabled","layout:flex"],1,"display:flex crea un contenedor flexible."],
+["¿Qué unidad depende del tamaño de fuente raíz?",["px","vw","rem","cm"],2,"rem es relativa al tamaño de fuente del elemento raíz."],
+["¿Qué palabra clave impide reasignar una variable?",["var","let","const","static"],2,"const impide reasignar el identificador."],
+["¿Qué operador compara valor y tipo?",["=","==","===","!="],2,"=== realiza una comparación estricta."],
+["¿Qué método registra un listener de eventos?",["addEventListener()","createEvent()","listen()","eventClick()"],0,"addEventListener registra una función para un evento."],
+["¿Qué método guarda una cadena en almacenamiento local?",["sessionStorage.save()","localStorage.setItem()","document.store()","browser.write()"],1,"localStorage.setItem(clave, valor) guarda una cadena."]
+];
+function renderQuiz(){
+ $("#quiz-container").innerHTML=`<div class="card"><b>Progreso de respuestas</b><span id="quiz-progress-text" style="float:right">0 / 12</span><div class="progress-track"><div class="progress-fill" id="quiz-progress-fill"></div></div></div><form id="quiz-form">${questions.map((q,i)=>`<article class="quiz-question"><h3><span class="question-number">${i+1}</span>${q[0]}</h3>${q[1].map((a,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}" ${progress.quizAnswers[i]===j?"checked":""}>${a}</label>`).join("")}<div id="exp${i}" class="quiz-explanation"></div></article>`).join("")}<div class="toolbar"><button class="btn btn-primary" type="submit">Corregir evaluación</button><button class="btn btn-secondary" type="button" id="reset-quiz">Reiniciar quiz</button></div></form><div id="quiz-result"></div>`;
+ $$('input[type="radio"]').forEach(i=>i.onchange=quizProgress);
+ $("#quiz-form").onsubmit=e=>{e.preventDefault();submitQuiz()};
+ $("#reset-quiz").onclick=()=>{progress.quizAnswers={};progress.quizCompleted=false;progress.quizScore=0;save();renderQuiz()};
+ quizProgress();
+ if(progress.quizCompleted){questions.forEach((q,i)=>showExplanation(i,progress.quizAnswers[i]===q[2]));showQuizResult(progress.quizScore,true);$$('input[type="radio"]').forEach(i=>i.disabled=true)}
+}
+function quizProgress(){let n=questions.filter((q,i)=>$(`input[name="q${i}"]:checked`)).length;$("#quiz-progress-text").textContent=`${n} / 12 respondidas`;$("#quiz-progress-fill").style.width=`${n/12*100}%`}
+function showExplanation(i,correct){const q=questions[i],e=$("#exp"+i);e.className=`quiz-explanation show ${correct?"correct":"incorrect"}`;e.innerHTML=`<b>${correct?"✓ Correcto":"✗ Incorrecto"}</b><p>${q[3]}</p>${correct?"":`<p>Respuesta correcta: <strong>${q[1][q[2]]}</strong></p>`}`}
+function submitQuiz(){
+ let ans={},n=0;questions.forEach((q,i)=>{let v=$(`input[name="q${i}"]:checked`);if(v){ans[i]=+v.value;n++}});
+ if(n!==12){notify(`Te faltan ${12-n} preguntas.`,"error");return}
+ let score=0;questions.forEach((q,i)=>{if(ans[i]===q[2])score++;showExplanation(i,ans[i]===q[2])});
+ progress.quizAnswers=ans;progress.quizCompleted=true;progress.quizScore=score;save();$$('input[type="radio"]').forEach(i=>i.disabled=true);showQuizResult(score,false)
+}
+function showQuizResult(score,restored){let p=Math.round(score/12*100),msg=p>=90?"¡Excelente! Dominas los fundamentos.":p>=70?"¡Muy bien! Tienes una buena base.":p>=50?"Vas por buen camino. Repasa algunos conceptos.":"Buen intento. Sigue practicando y vuelve a intentarlo.";$("#quiz-result").innerHTML=`<div class="quiz-result-card"><div class="quiz-score">${p}%</div><h2>${score} de 12 respuestas correctas</h2><p>${msg}</p>${restored?"<small>Resultado recuperado de tu progreso.</small>":""}</div>`}
+function dashboard(){
+ let total=16+6+1,done=progress.completedLessons.length+progress.completedChallenges.length+(progress.quizCompleted?1:0),pct=Math.round(done/total*100),xp=progress.completedLessons.length*10+challenges.filter(c=>progress.completedChallenges.includes(c.id)).reduce((a,c)=>a+c.xp,0)+(progress.quizCompleted?Math.round(progress.quizScore/12*100):0);
+ $("#progress-percent").textContent=pct+"%";$("#progress-bar").style.width=pct+"%";$("#completed-lessons").textContent=progress.completedLessons.length;$("#completed-challenges").textContent=progress.completedChallenges.length+"/6";$$("#total-xp").forEach(e=>e.textContent=xp);$("#quiz-score").textContent=progress.quizCompleted?`${progress.quizScore}/12`:"Pendiente";
+}
+document.addEventListener("DOMContentLoaded",()=>{renderModules();renderLesson();renderChallenges();dashboard();showView("temario")});
+</script>
+</body>
+</html>
